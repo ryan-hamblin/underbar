@@ -55,11 +55,12 @@
       for (var i = 0; i < collection.length; i++) {
         iterator(collection[i], i, collection);
       }
-    }else if(typeof collection === 'object' && collection !== null){
+    }else {
       for(var key in collection){
         iterator(collection[key], key, collection);
       }
     }
+    
   };
 
   // Returns the index at which value can be found in the array, or -1 if value
@@ -81,12 +82,21 @@
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
+    var results = [];
+    _.each(collection, function(val){
+      if(test(val)){
+        results.push(val);
+      }
+    });
+    return results;
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
+    
+
   };
 
   // Produce a duplicate-free version of the array.
