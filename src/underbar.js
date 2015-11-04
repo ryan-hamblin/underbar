@@ -60,7 +60,7 @@
         iterator(collection[key], key, collection);
       }
     }
-    
+
   };
 
   // Returns the index at which value can be found in the array, or -1 if value
@@ -94,20 +94,30 @@
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
-    // copying code in and modifying it
-    var results = [];
-    _.filter(collection, function(val){
-      if(!test(val)){
-        results.push(val);
-      }
-    });
-    return results;
-
+    // // copying code in and modifying it
+    // var results = [];
+    // _.filter(collection, function(val){
+    //   if(!test(val)){
+    //     results.push(val);
+    //   }
+    // });
+    // return results;
+    return _.filter(collection, function(val){
+      return test(val) === false;
+    })
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
-    
+    var cleanObj = {};
+    var results = [];
+    _.each(array, function(val){
+      cleanObj[val] = val;
+    })
+    _.each(cleanObj, function(val){
+      results.push(cleanObj[val]);
+    })
+    return results;
   };
 
 
@@ -162,6 +172,14 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    _.each(collection, function(item){
+      if(accumulator === undefined){
+        accumulator = item;
+      }else{
+        accumulator = iterator(accumulator, item);
+      }
+    })
+      return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -179,7 +197,17 @@
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
+
+    if(iterator === undefined){
+      iterator = _.identity;
+    }
+    return _.reduce(collection, function(passed, item){
+      if (passed === false) {
+        return false;
+      }
+      return Boolean(iterator(item));
+    }, true)
+
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
@@ -190,21 +218,21 @@
 
 
   /**
-   * OBJECTS
-   * =======
+   * BJECTS
+   * ======
    *
-   * In this section, we'll look at a couple of helpers for merging objects.
+   * n this section, we'll look at a couple of helpers for merging objects.
    */
 
-  // Extend a given object with all the properties of the passed in
-  // object(s).
+  // xtend a given object with all the properties of the passed in
+  // bject(s).
   //
-  // Example:
-  //   var obj1 = {key1: "something"};
-  //   _.extend(obj1, {
-  //     key2: "something new",
-  //     key3: "something else new"
-  //   }, {
+  // xample:
+  //  var obj1 = {key1: "something"};
+  //  _.extend(obj1, {
+  //    key2: "something new",
+  //    key3: "something else new"
+  //  }, {
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
